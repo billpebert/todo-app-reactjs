@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>List</title>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
+        <link rel="stylesheet" href="./style.css">
+
+    </head>
+
+    <body>
+        <nav class="py-4 md:pt-[38px] md:pb-[31px] bg-skyBlue mb-7 md:mb-11">
+            <div class="container">
+                <h3 class="uppercase text-white font-bold text-lg md:text-2xl">
+                    <a href="./index.html" data-cy="header-title">TO DO LIST APP</a>
+                </h3>
+            </div>
+        </nav>
+
+        <main class="pb-20">
+            <div class="container">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-8">
+                    <div class="inline-flex items-center gap-5 justify-between md:justify-start w-max">
+                        <!-- Back Button -->
+                        <a href="./">
+                            <button type="button" class="hidden md:block w-5 md:w-6">
+                                <img src="../svg/ic-chevron-left.svg" alt="" />
+                            </button>
+                        </a>
+                        <h1 class="text-base md:text-4xl font-bold" id="activityH1" data-cy="todo-title">
+                            {{ activity.title }}
+                        </h1>
+                        <input type="text"
+                            class="text-base md:text-4xl font-bold border-b border-b-[#D8D8D8] py-3 read-only:border-none outline-none w-max flex-shrink" hidden
+                            placeholder="activity.title" name="activity_name" id="activityName" />
+                        <button type="button" class="w-5 md:w-6">
+                            <img src="../svg/ic-pencil.svg" alt="" />
+                        </button>
+                    </div>
+                    <div class="inline-flex items-center gap-5 self-end">
+                        <!-- Sort Button -->
+                        <button type="button" id="dropdownMenuButton1" data-te-dropdown-toggle-ref aria-expanded="false"
+                            class="border border-[#e5e5e5] rounded-full p-[11px] md:p-[15px]"
+                            data-te-dropdown-animation="off">
+                            <img src="../svg/ic-arrows.svg" class="w-4 md:w-6" alt="" />
+                        </button>
+
+                        <!-- Add button -->
+                        <button type="button"
+                            class="flex items-center text-xs md:text-lg font-semibold rounded-full px-[15px] md:px-7 py-2 md:py-3 disabled:bg-opacity-20 bg-skyBlue text-white"
+                            data-cy="todo-add-button" data-te-toggle="modal" data-te-target="#exampleModal">
+                            <img src="../svg/ic-plus.svg" class="mr-[6px] w-3 md:w-6" alt="" />
+                            Tambah
+                        </button>
+                    </div>
+                </div>
+
+
+                <!-- Modal -->
+                <div data-te-modal-init
+                    class="fixed top-0 left-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none"
+                    id="modalDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div data-te-modal-dialog-ref
+                        class="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out mx-auto mt-20 max-w-[320px] md:max-w-[490px]">
+                        <div class="sm:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-xl border-none bg-white bg-clip-padding text-current shadow-lg outline-none"
+                            data-cy="modal-delete">
+                            <div class="relative flex-auto flex flex-col gap-[26px] p-5 md:p-10" data-te-modal-body-ref>
+                                <div class="flex flex-col gap-2 items-center">
+                                    <img src="../svg/ic-exclamation-triangle.svg" alt="" />
+                                    <p class="text-center font-medium text-sm md:text-lg my-7 md:my-8">
+                                        Apakah anda yakin menghapus activity <br class="hidden md:block" />
+                                        <span class="font-bold">"{{ activityName }}"</span>?
+                                    </p>
+                                    <div class="inline-flex gap-5">
+                                        <button type="button"
+                                            class="flex items-center text-xs md:text-lg font-semibold rounded-full px-[15px] md:px-7 py-2 md:py-3 disabled:bg-opacity-20 bg-secondary text-darkBrown"
+                                            data-te-modal-dismiss aria-label="Close"
+                                            data-cy="modal-delete-cancel-button">
+                                            Batal
+                                        </button>
+                                        <button type="button"
+                                            class="flex items-center text-xs md:text-lg font-semibold rounded-full px-[15px] md:px-7 py-2 md:py-3 disabled:bg-opacity-20 bg-[#ED4C5C] text-white"
+                                            data-te-modal-dismiss data-cy="modal-delete-confirm-button">
+                                            Hapus
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toast -->
+                <div class="fixed top-8 right-4 md:top-5 md:right-5" data-cy="modal-information">
+                    <div class="pointer-events-auto mx-auto hidden w-96 max-w-full rounded-lg bg-white text-sm shadow-md shadow-black/5 data-[te-toast-show]:block data-[te-toast-hide]:hidden"
+                        id="toastTodoAlert" role="alert" aria-live="assertive" aria-atomic="true"
+                        data-te-autohide="true" data-te-toast-init data-te-toast-show data-te-animation="true"
+                        data-te-class-fade-in>
+                        <div class="flex items-center rounded-xl bg-white px-6 py-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z"
+                                    stroke="#00A790" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                <path d="M12 8V12" stroke="#00A790" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                                <path d="M12 16H12.01" stroke="#00A790" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            <p class="font-medium text-sm text-dark ml-[10px]">{{ text }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div data-cy="activity-empty-state">
+                    <img src="../svg/item-list-empty.svg" class="h-[490px] w-auto mx-auto md:mt-[60px] hidden md:block"
+                        alt="" />
+                    <img src="../svg/item-list-empty-sm-screen.svg"
+                        class="w-auto mx-auto md:mt-[60px] block md:hidden mt-20" alt="" />
+                </div>
+            </div>
+        </main>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
+    </body>
+
+</html>
