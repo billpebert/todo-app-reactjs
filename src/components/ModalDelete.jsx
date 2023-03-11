@@ -1,5 +1,4 @@
 import React from "react";
-import { deleteActivity } from "../helper/activitiesApi";
 
 export default function ModalDelete({title, id, deleteHandler}) {
 	return (
