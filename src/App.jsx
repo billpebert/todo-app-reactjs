@@ -1,8 +1,7 @@
+import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/NavigationBar";
 import Home from "./pages/HomeView";
-
-import { Routes, Route } from "react-router-dom";
-import DetailView from "./pages/DetailView";
+import Detail from "./pages/DetailView";
 
 function App() {
 	return (
@@ -11,7 +10,7 @@ function App() {
 			<main className="pb-20">
 				<Routes>
 					<Route path="/" element={<Home />} />
-					<Route path="/activity-:id" element={<DetailView />} />
+					<Route path="/activity/:id" element={<Detail />} />
 				</Routes>
 			</main>
 		</>

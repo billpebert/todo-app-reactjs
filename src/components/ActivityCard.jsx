@@ -18,7 +18,7 @@ export default function ActivityCard({id, title, date, clickHandler}) {
 			<h5 className="text-sm md:text-lg font-bold" data-cy="activity-item-title">
 				{title}
 			</h5>
-			<Link to={`/activity-${id}`} className="inset-0 absolute"></Link>
+			<Link to={`/activity/${id}`} className="inset-0 absolute"></Link>
 			<div className="flex items-center justify-between mt-auto">
 				<p className="text-[10px] md:text-sm text-grey font-medium" data-cy="activity-item-date">
 					{formattedDate(date)}
