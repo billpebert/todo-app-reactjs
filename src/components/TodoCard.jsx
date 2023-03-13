@@ -16,7 +16,7 @@ export default function TodoCard({ id, priority, label, isActive, markAsDone, pa
 	}
 
 	return (
-		<div className="rounded-xl bg-white shadow-custom flex flex-col py-[18px] md:py-[26px] px-5 md:px-6 w-full" data-cy={`todo-item-${index}`}>
+		<div className="rounded-xl bg-white shadow-custom flex flex-col py-[18px] md:py-[26px] px-5 md:px-6 w-full" data-cy={`todo-item`}>
 			<div className="inline-flex items-center justify-between">
 				<div className="inline-flex gap-4 items-center">
 					<input
