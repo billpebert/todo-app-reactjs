@@ -5,10 +5,6 @@ import App from "./App";
 import "./index.css";
 import "tw-elements"
 
-// import * as dotenv from 'dotenv'
-
-// dotenv.config()
-
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<React.StrictMode>
 		<BrowserRouter>
