@@ -49,7 +49,7 @@ export default function DropdownSort({sortData}) {
                             sortData(event.target.id)
                             addCheckIcon(event)
                         }}
-						data-cy="sort-latest"
+						data-cy="sort-selection"
 					>
 						<img src="/svg/ic-sort-newest.svg" alt="" />
 						Terbaru
@@ -65,7 +65,7 @@ export default function DropdownSort({sortData}) {
                             sortData(event.target.id)
                             addCheckIcon(event)
                         }}
-						data-cy="sort-oldest"
+						data-cy="sort-selection"
 					>
 						<img src="/svg/ic-sort-oldest.svg" alt="" />
 						Terlama
@@ -81,7 +81,7 @@ export default function DropdownSort({sortData}) {
                             sortData(event.target.id)
                             addCheckIcon(event)
                         }}
-						data-cy="sort-az"
+						data-cy="sort-selection"
 					>
 						<img src="/svg/ic-sort-asc.svg" alt="" />
 						A-Z
@@ -93,7 +93,7 @@ export default function DropdownSort({sortData}) {
 						href="#"
 						data-te-dropdown-item-ref
 						id="desc"
-						data-cy="sort-za"
+						data-cy="sort-selection"
                         onClick={() => {
                             sortData(event.target.id)
                             addCheckIcon(event)
@@ -109,7 +109,7 @@ export default function DropdownSort({sortData}) {
 						href="#"
 						data-te-dropdown-item-ref
 						id="ongoing"
-						data-cy="todo-unfinished"
+						data-cy="sort-selection"
                         onClick={() => {
                             sortData(event.target.id)
                             addCheckIcon(event)
