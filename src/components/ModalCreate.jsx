@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Button from "./Button";
 import PriorityOptions from "./PriorityOptions";
-import PropTypes from "prop-types";
-
-// ModalCreate.propTypes = {
-// 	defTitle: String
-// }
 
 export default function ModalCreate({
 	submitHandler,
