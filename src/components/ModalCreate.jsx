@@ -34,7 +34,7 @@ export default function ModalCreate({
 				data-te-modal-dialog-ref
 				className="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto mt-20 min-[576px]:max-w-[800px] px-5"
 			>
-				<div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none" data-cy="modal-add">
+				<form className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none" data-cy="modal-add">
 					<div className="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4">
 						<h5 className="text-lg font-medium leading-normal text-neutral-800" id="exampleModalLabel" data-cy="modal-add-title">
 							{method == "create" ? "Tambah List" : "Edit"} Item
@@ -114,7 +114,7 @@ export default function ModalCreate({
 							)}
 						</div>
 					</div>
-				</div>
+				</form>
 			</div>
 		</div>
 	);
