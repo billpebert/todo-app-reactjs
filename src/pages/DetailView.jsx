@@ -23,6 +23,7 @@ export default function DetailView() {
 	const [activityName, setActivityName] = useState("Default Name");
 	const [activityId, setActivityId] = useState(0);
 	const [isUpdate, setIsUpdate] = useState(false)
+	const [showModalDelete, setShowModalDelete] = useState(false);
 
 	// Pass to edit modal
 	const [todoEditId, setTodoEditId] = useState(0);
@@ -159,8 +160,13 @@ export default function DetailView() {
 		setTodoEditPriority(priority);
 	};
 
+	const closeModal = () => {
+		setShowModalDelete((state) => !state)
+	} 
+
 	// Pass data to modal delete
 	function passToModalDelete(id, name) {
+		setShowModalDelete((state) => !state)
 		return setActivityName(name), setActivityId(id);
 	}
 
@@ -289,7 +295,11 @@ export default function DetailView() {
 						defTitle={todoEditTitle}
 						defPriority={todoEditPriority}
 					/>
-					<ModalDelete title={activityName} id={activityId} deleteHandler={deleteActivity} />
+					{
+						showModalDelete && (
+							<ModalDelete title={activityName} id={activityId} deleteHandler={deleteActivity} closeModal={closeModal} />
+						)
+					}
 				</>
 			)}
 		</>

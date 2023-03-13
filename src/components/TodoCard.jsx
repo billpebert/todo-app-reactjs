@@ -57,8 +57,6 @@ export default function TodoCard({ id, priority, label, isActive, markAsDone, pa
 				<button
 					type="button"
 					className="w-4 md:w-6"
-					data-te-toggle="modal"
-					data-te-target="#modalDelete"
 					data-cy="todo-item-delete-button"
 					onClick={() => {
 						passToModalDelete(id, label);

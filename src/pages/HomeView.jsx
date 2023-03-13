@@ -14,6 +14,7 @@ export default function Home() {
 	const [isLoading, setIsLoading] = useState(false);
 	const [showToast, setShowToast] = useState(false);
 	const [message, setMessage] = useState("");
+	const [showModalDelete, setShowModalDelete] = useState(false);
 
 	const api = "https://todo.api.devcode.gethired.id";
 	const email = "bilpo@mail.com";
@@ -52,6 +53,10 @@ export default function Home() {
 			});
 	}
 
+	const closeModal = () => {
+		setShowModalDelete((state) => !state)
+	} 
+
 	function deleteActivity(id) {
 		axios
 			.delete(`${api}/activity-groups/${id}`)
@@ -68,6 +73,9 @@ export default function Home() {
 	function passDataToModal(id, name) {
 		setActivityId(id);
 		setActivityName(name);
+
+		// Open delete modal
+		setShowModalDelete((state) => !state);
 	}
 
 	return (
@@ -104,7 +112,10 @@ export default function Home() {
 							})}
 						</div>
 					</div>
-					<ModalDelete title={activityName} id={activityId} deleteHandler={deleteActivity} />
+
+					{showModalDelete && (
+						<ModalDelete title={activityName} id={activityId} deleteHandler={deleteActivity} closeModal={closeModal} />
+					)}
 					{showToast && <AlertToast message={message} />}
 					{!activities.length && <EmptyActivity />}
 				</>
