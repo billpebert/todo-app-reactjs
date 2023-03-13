@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Button({ children, variant="danger", isDisabled=false, clickHandler }) {
+export default function Button({ children, variant="danger", isDisabled=false, clickHandler, dataCy }) {
 	function variantStyle(ve) {
 		if (ve == "primary") {
 			return "bg-skyBlue text-white";
@@ -19,6 +19,7 @@ export default function Button({ children, variant="danger", isDisabled=false, c
 			)}`}
 			disabled={isDisabled}
 			onClick={clickHandler}
+			data-cy={dataCy}
 		>
 			{children}
 		</button>

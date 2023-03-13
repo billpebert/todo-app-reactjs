@@ -54,8 +54,8 @@ export default function Home() {
 	}
 
 	const closeModal = () => {
-		setShowModalDelete((state) => !state)
-	} 
+		setShowModalDelete((state) => !state);
+	};
 
 	function deleteActivity(id) {
 		axios
@@ -89,12 +89,10 @@ export default function Home() {
 							<h1 className="text-base md:text-4xl font-bold" data-cy="activity-title">
 								Activity
 							</h1>
-							<div data-cy="activity-add-button">
-								<Button variant={"primary"} clickHandler={createActivity}>
-									<img src="/svg/ic-plus.svg" className="mr-[6px] w-3 md:w-6" alt="" />
-									Tambah
-								</Button>
-							</div>
+							<Button variant={"primary"} clickHandler={createActivity} dataCy="activity-add-button">
+								<img src="/svg/ic-plus.svg" className="mr-[6px] w-3 md:w-6" alt="" />
+								Tambah
+							</Button>
 						</div>
 
 						<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-[50px] gap-x-5 gap-y-6">
@@ -114,7 +112,12 @@ export default function Home() {
 					</div>
 
 					{showModalDelete && (
-						<ModalDelete title={activityName} id={activityId} deleteHandler={deleteActivity} closeModal={closeModal} />
+						<ModalDelete
+							title={activityName}
+							id={activityId}
+							deleteHandler={deleteActivity}
+							closeModal={closeModal}
+						/>
 					)}
 					{showToast && <AlertToast message={message} />}
 					{!activities.length && <EmptyActivity />}

@@ -259,8 +259,8 @@ export default function DetailView() {
 								<DropdownSort sortData={sortData} />
 
 								{/* Button Tambah */}
-								<div data-cy="todo-add-button" data-te-toggle="modal" data-te-target="#exampleModal">
-									<Button variant="primary" clickHandler={() => modalCreateData()}>
+								<div data-te-toggle="modal" data-te-target="#exampleModal">
+									<Button variant="primary" clickHandler={() => modalCreateData()} dataCy="todo-add-button">
 										<img src="/svg/ic-plus.svg" className="mr-[6px] w-3 md:w-6" alt="" />
 										Tambah
 									</Button>

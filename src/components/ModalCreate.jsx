@@ -86,7 +86,7 @@ export default function ModalCreate({
 						</div>
 					</div>
 					<div className="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 disabled:bg-opacity-20">
-						<div data-te-modal-dismiss data-cy="modal-add-save-button">
+						<div data-te-modal-dismiss>
 							{method == "create" ? (
 								<Button
 									variant="primary"
@@ -96,6 +96,7 @@ export default function ModalCreate({
 										setTitle("");
 										setPriority("Pilih priority");
 									}}
+									dataCy="modal-add-save-button"
 								>
 									Simpan
 								</Button>
@@ -108,6 +109,7 @@ export default function ModalCreate({
 										setTitle("");
 										setPriority("Pilih priority");
 									}}
+									dataCy="modal-add-save-button"
 								>
 									Update
 								</Button>
