@@ -28,10 +28,9 @@ export default function TodoCard({ id, priority, label, isActive, markAsDone, pa
 						onClick={() => {
 							markAsDone(id, !isActive);
 						}}
-						data-cy="todo-item-checkbox"
 						onChange={(e) => {}}
 					/>
-					<label htmlFor={`${label}Checkbox`} className="check--label cursor-pointer">
+					<label htmlFor={`${label}Checkbox`} className="check--label cursor-pointer" data-cy="todo-item-checkbox">
 						<span className="check--label-box"></span>
 						<span className="check--label-text">
 							<span
