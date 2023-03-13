@@ -9,6 +9,7 @@ export default function ModalDelete({title, id, deleteHandler}) {
 			tabIndex="-1"
 			aria-labelledby="exampleModalLabel"
 			aria-hidden="true"
+			data-cy="modal-delete"
 		>
 			<div
 				data-te-modal-dialog-ref
@@ -16,7 +17,6 @@ export default function ModalDelete({title, id, deleteHandler}) {
 			>
 				<div
 					className="sm:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-xl border-none bg-white bg-clip-padding text-current shadow-lg outline-none"
-					data-cy="modal-delete"
 				>
 					<div className="relative flex-auto flex flex-col gap-[26px] p-5 md:p-10" data-te-modal-body-ref>
 						<div className="flex flex-col gap-2 items-center">
