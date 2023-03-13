@@ -22,6 +22,12 @@ export default function DetailView() {
 	const [showTitleForm, setShowTitleForm] = useState(false);
 	const [activityName, setActivityName] = useState("Default Name");
 	const [activityId, setActivityId] = useState(0);
+	const [isUpdate, setIsUpdate] = useState(false)
+
+	// Pass to edit modal
+	const [todoEditId, setTodoEditId] = useState(0);
+	const [todoEditTitle, setTodoEditTitle] = useState("");
+	const [todoEditPriority, setTodoEditPriority] = useState("Pilih priority");
 
 	function getActivity() {
 		setIsLoading(true);
@@ -74,11 +80,29 @@ export default function DetailView() {
 				priority: priority,
 			})
 			.then((response) => {
+				setIsUpdate(false)
 				getActivity();
 				// console.log(response);
 			})
 			.catch((error) => {
 				console.error(error);
+			});
+	}
+
+	function updateItem(id, title, priority) {
+		// console.log(id, title, priority)
+		axios
+			.patch(`${api}/todo-items/${id}`, {
+				id: id,
+				title: title,
+				activity_group_id: activityGroup,
+				priority: priority,
+			})
+			.catch((error) => {
+				console.error(error);
+			})
+			.finally(() => {
+				getActivity();
 			});
 	}
 
@@ -108,6 +132,7 @@ export default function DetailView() {
 			});
 	}
 
+	// Switch #activityH1 with input
 	const toggleEditActName = () => {
 		setShowTitleForm((state) => !state);
 		// console.log(showTitleForm)
@@ -118,16 +143,31 @@ export default function DetailView() {
 		}
 	};
 
+	// Make sure that the modal form is cleared
+	const modalCreateData = () => {
+		setIsUpdate(false)
+		setTodoEditId(0);
+		setTodoEditTitle("");
+		setTodoEditPriority("Pilih priority");
+	}
+
+	// Pass existing todo data to modal
+	const modalEditData = (id, title, priority) => {
+		setIsUpdate(true)
+		setTodoEditId(id);
+		setTodoEditTitle(title);
+		setTodoEditPriority(priority);
+	};
+
+	// Pass data to modal delete
 	function passToModalDelete(id, name) {
-		// console.log(id, name)
 		return setActivityName(name), setActivityId(id);
 	}
 
 	function sortData(type) {
 		if (localStorage.getItem("sortBy")) localStorage.setItem("sortBy", type);
+
 		const todoItems = [...todos];
-		// console.log({todoItems})
-		// console.log({todos})
 		if (type == "asc") {
 			todoItems.sort(function (a, b) {
 				// changing the case (to upper or lower) ensures a case insensitive sort.
@@ -212,7 +252,7 @@ export default function DetailView() {
 								{/* <!-- Sort Button --> */}
 								<DropdownSort data-cy="dropdown-sort" sortData={sortData} />
 								<div data-cy="todo-add-button" data-te-toggle="modal" data-te-target="#exampleModal">
-									<Button variant="primary">
+									<Button variant="primary" clickHandler={() => modalCreateData()}>
 										<img src="/svg/ic-plus.svg" className="mr-[6px] w-3 md:w-6" alt="" />
 										Tambah
 									</Button>
@@ -230,16 +270,23 @@ export default function DetailView() {
 										isActive={todo.is_active}
 										markAsDone={markAsDone}
 										passToModalDelete={passToModalDelete}
+										passToModalEdit={modalEditData}
 									/>
 								);
 							})}
 						</div>
 
-					{!todos.length && <EmptyTodo/> }
+						{!todos.length && <EmptyTodo />}
 					</div>
 					{showToast && <AlertToast message={message} />}
-					<ModalCreate createItem={createItem} />
-					<ModalDelete title={activityName} id={activityId} deleteHandler={deleteActivity} />)
+					<ModalCreate
+						method={isUpdate ? "edit" : "create"}
+						submitHandler={isUpdate ? updateItem : createItem}
+						defId={todoEditId}
+						defTitle={todoEditTitle}
+						defPriority={todoEditPriority}
+					/>
+					<ModalDelete title={activityName} id={activityId} deleteHandler={deleteActivity} />
 				</>
 			)}
 		</>

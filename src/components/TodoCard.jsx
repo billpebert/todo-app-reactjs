@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function TodoCard({ id, priority, label, isActive, markAsDone, passToModalDelete }) {
+export default function TodoCard({ id, priority, label, isActive, markAsDone, passToModalDelete, passToModalEdit }) {
 	function generatePriority(valPriority) {
 		if (valPriority == "very-high") {
 			return "bg-danger";
@@ -39,15 +39,15 @@ export default function TodoCard({ id, priority, label, isActive, markAsDone, pa
 									priority
 								)}`}
 							></span>
-							<p className="font-medium text-sm md:text-lg">{label + id}</p>
+							<p className="font-medium text-sm md:text-lg">{label}</p>
 						</span>
 					</label>
 					<button
 						type="button"
 						className="w-3 md:w-6"
-						// @click="$emit('passItemData', id, title, props.priority)"
 						data-te-toggle="modal"
-						data-te-target="#modalUpdate"
+						data-te-target="#exampleModal"
+						onClick={() => passToModalEdit(id, label, priority)}
 					>
 						<img src="/svg/ic-pencil.svg" alt="" />
 					</button>

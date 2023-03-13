@@ -11,7 +11,7 @@ export default function Home() {
 	const [activityId, setActivityId] = useState(0);
 
 	const [activities, setActivities] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
 	const [showToast, setShowToast] = useState(false);
 	const [message, setMessage] = useState("");
 
@@ -23,15 +23,11 @@ export default function Home() {
 	}, []);
 
 	function getActivities() {
-		setIsLoading(true);
 		const fetchData = async () => {
 			try {
 				const response = await axios.get(`${api}/activity-groups?email=${email}`);
-
-				setIsLoading(false);
 				setActivities(response.data.data);
 			} catch (error) {
-				setIsLoading(true);
 				console.error(error);
 			}
 		};

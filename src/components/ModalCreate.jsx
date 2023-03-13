@@ -1,24 +1,30 @@
 import React, { useEffect, useState } from "react";
 import Button from "./Button";
 import PriorityOptions from "./PriorityOptions";
+import PropTypes from "prop-types";
 
-export default function ModalCreate({ createItem }) {
-	const [form, setForm] = useState({
-		name: "",
-	});
+// ModalCreate.propTypes = {
+// 	defTitle: String
+// }
 
-	const handleChange = (e) => {
-		let data = { ...form };
-		data[e.target.name] = e.target.value;
-		setForm(data);
-	};
-
+export default function ModalCreate({
+	submitHandler,
+	method = "create",
+	defTitle = "",
+	defPriority = "Pilih priority",
+	defId = 0,
+}) {
 	const [title, setTitle] = useState("");
-	const [priority, setPriority] = useState("Pilih priority");
+	const [priority, setPriority] = useState(defPriority);
 
 	function updateSelected(val) {
 		setPriority(val);
 	}
+
+	useEffect(() => {
+		setTitle(defTitle);
+		setPriority(defPriority);
+	}, [defId, defTitle, defPriority]);
 
 	return (
 		<div
@@ -36,7 +42,7 @@ export default function ModalCreate({ createItem }) {
 				<div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none">
 					<div className="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4">
 						<h5 className="text-lg font-medium leading-normal text-neutral-800" id="exampleModalLabel">
-							Tambah List
+							{method == "create" ? "Tambah List" : "Edit"} Item
 						</h5>
 						<button
 							type="button"
@@ -85,17 +91,31 @@ export default function ModalCreate({ createItem }) {
 					</div>
 					<div className="flex flex-shrink-0 flex-wrap items-center justify-end rounded-b-md border-t-2 border-neutral-100 border-opacity-100 p-4 disabled:bg-opacity-20">
 						<div data-te-modal-dismiss data-cy="modal-add-save-button">
-							<Button
-								variant="primary"
-								isDisabled={title == ""}
-								clickHandler={() => {
-									createItem(title, priority == 'Pilih priority' ? 'very-high' : priority);
-									setTitle("");
-									setPriority("Pilih priority");
-								}}
-							>
-								Simpan
-							</Button>
+							{method == "create" ? (
+								<Button
+									variant="primary"
+									isDisabled={title == ""}
+									clickHandler={() => {
+										submitHandler(title, priority == "Pilih priority" ? "very-high" : priority);
+										setTitle("");
+										setPriority("Pilih priority");
+									}}
+								>
+									Simpan
+								</Button>
+							) : (
+								<Button
+									variant="primary"
+									isDisabled={title == ""}
+									clickHandler={() => {
+										submitHandler(defId, title, priority == "Pilih priority" ? "very-high" : priority);
+										setTitle("");
+										setPriority("Pilih priority");
+									}}
+								>
+									Update
+								</Button>
+							)}
 						</div>
 					</div>
 				</div>

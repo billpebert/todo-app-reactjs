@@ -24,7 +24,6 @@ export default function ModalDelete({title, id, deleteHandler}) {
 							<p className="text-center font-medium text-sm md:text-lg my-7 md:my-8">
 								Apakah anda yakin menghapus activity <br className="hidden md:block" />
 								<span className="font-bold">"{title}"</span>?
-								{id}
 							</p>
 							<div className="inline-flex gap-5">
 								<button
