@@ -71,6 +71,7 @@ export default function PriorityOptions({updateSelected, selectedPriority}) {
 								href="#"
 								data-te-dropdown-item-ref
                                 onClick={() => selectPriority(priority)}
+								data-cy={`modal-add-priority-${priority == "normal" ? "medium" : priority}`}
 							>
 								<span
 									className={`md:w-[9px] w-[5px] md:h-[9px] h-[5px] rounded-full mr-5 ${generatePriority(

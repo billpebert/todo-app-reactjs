@@ -22,7 +22,7 @@ export default function DropdownSort({sortData}) {
 	}, []);
 
 	return (
-		<div className="relative" data-te-dropdown-ref data-cy="todo-sort-button">
+		<div className="relative" data-te-dropdown-ref>
 			<button
 				type="button"
 				id="dropdownMenuButton1"
@@ -30,6 +30,7 @@ export default function DropdownSort({sortData}) {
 				aria-expanded="false"
 				className="border border-[#e5e5e5] rounded-full p-[11px] md:p-[15px]"
 				data-te-dropdown-animation="off"
+				data-cy="todo-sort-button"
 			>
 				<img src="/svg/ic-arrows.svg" className="w-4 md:w-6" alt="" />
 			</button>
@@ -48,6 +49,7 @@ export default function DropdownSort({sortData}) {
                             sortData(event.target.id)
                             addCheckIcon(event)
                         }}
+						data-cy="sort-latest"
 					>
 						<img src="/svg/ic-sort-newest.svg" alt="" />
 						Terbaru
@@ -63,7 +65,7 @@ export default function DropdownSort({sortData}) {
                             sortData(event.target.id)
                             addCheckIcon(event)
                         }}
-						data-cy="sort-selection"
+						data-cy="sort-oldest"
 					>
 						<img src="/svg/ic-sort-oldest.svg" alt="" />
 						Terlama
@@ -79,7 +81,7 @@ export default function DropdownSort({sortData}) {
                             sortData(event.target.id)
                             addCheckIcon(event)
                         }}
-						data-cy="todo-sort-button"
+						data-cy="sort-az"
 					>
 						<img src="/svg/ic-sort-asc.svg" alt="" />
 						A-Z
@@ -91,7 +93,7 @@ export default function DropdownSort({sortData}) {
 						href="#"
 						data-te-dropdown-item-ref
 						id="desc"
-						data-cy="todo-sort-button"
+						data-cy="sort-za"
                         onClick={() => {
                             sortData(event.target.id)
                             addCheckIcon(event)
@@ -107,7 +109,7 @@ export default function DropdownSort({sortData}) {
 						href="#"
 						data-te-dropdown-item-ref
 						id="ongoing"
-						data-cy="todo-sort-button"
+						data-cy="todo-unfinished"
                         onClick={() => {
                             sortData(event.target.id)
                             addCheckIcon(event)

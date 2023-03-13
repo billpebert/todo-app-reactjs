@@ -20,8 +20,8 @@ export default function ModalDelete({title, id, deleteHandler}) {
 				>
 					<div className="relative flex-auto flex flex-col gap-[26px] p-5 md:p-10" data-te-modal-body-ref>
 						<div className="flex flex-col gap-2 items-center">
-							<img src="../svg/ic-exclamation-triangle.svg" alt="" />
-							<p className="text-center font-medium text-sm md:text-lg my-7 md:my-8">
+							<img src="../svg/ic-exclamation-triangle.svg" alt="" data-cy="modal-delete-icon" />
+							<p className="text-center font-medium text-sm md:text-lg my-7 md:my-8" data-cy="modal-delete-title">
 								Apakah anda yakin menghapus activity <br className="hidden md:block" />
 								<span className="font-bold">"{title}"</span>?
 							</p>

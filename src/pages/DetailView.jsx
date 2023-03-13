@@ -218,7 +218,7 @@ export default function DetailView() {
 							<div className="inline-flex items-center gap-5 justify-between md:justify-start w-max">
 								{/* <!-- Back Button --> */}
 								<Link to="/">
-									<button type="button" className="hidden md:block w-5 md:w-6">
+									<button type="button" className="hidden md:block w-5 md:w-6" data-cy="todo-back-button">
 										<img src="/svg/ic-chevron-left.svg" alt="" />
 									</button>
 								</Link>
@@ -244,13 +244,15 @@ export default function DetailView() {
 										onKeyDown={(e) => (e.key == "Enter" ? updateActivityTitle() : false)}
 									/>
 								)}
-								<button type="button" className="w-5 md:w-6" onClick={toggleEditActName}>
+								<button type="button" className="w-5 md:w-6" onClick={toggleEditActName} data-cy="todo-title-edit-button">
 									<img src="/svg/ic-pencil.svg" alt="" />
 								</button>
 							</div>
 							<div className="inline-flex items-center gap-5 self-end">
 								{/* <!-- Sort Button --> */}
-								<DropdownSort data-cy="dropdown-sort" sortData={sortData} />
+								<DropdownSort sortData={sortData} />
+
+								{/* Button Tambah */}
 								<div data-cy="todo-add-button" data-te-toggle="modal" data-te-target="#exampleModal">
 									<Button variant="primary" clickHandler={() => modalCreateData()}>
 										<img src="/svg/ic-plus.svg" className="mr-[6px] w-3 md:w-6" alt="" />
@@ -264,6 +266,7 @@ export default function DetailView() {
 								return (
 									<TodoCard
 										key={key}
+										index={key}
 										label={todo.title}
 										priority={todo.priority}
 										id={todo.id}

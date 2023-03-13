@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-export default function ActivityCard({id, title, date, clickHandler}) {
+export default function ActivityCard({id, title, date, clickHandler, index}) {
 
 	function formattedDate(date) {
 		// console.log(clickHandler(title, id))
@@ -13,7 +13,7 @@ export default function ActivityCard({id, title, date, clickHandler}) {
 	return (
 		<div
 			className="relative rounded-xl bg-white shadow-custom flex flex-col py-[22px] px-6 min-h-[150px] md:min-h-[235px]"
-			data-cy="activity-item"
+			data-cy={`activity-item-${index}`}
 		>
 			<h5 className="text-sm md:text-lg font-bold" data-cy="activity-item-title">
 				{title}

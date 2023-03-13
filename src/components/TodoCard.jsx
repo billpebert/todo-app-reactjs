@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function TodoCard({ id, priority, label, isActive, markAsDone, passToModalDelete, passToModalEdit }) {
+export default function TodoCard({ id, priority, label, isActive, markAsDone, passToModalDelete, passToModalEdit, index }) {
 	function generatePriority(valPriority) {
 		if (valPriority == "very-high") {
 			return "bg-danger";
@@ -16,7 +16,7 @@ export default function TodoCard({ id, priority, label, isActive, markAsDone, pa
 	}
 
 	return (
-		<div className="rounded-xl bg-white shadow-custom flex flex-col py-[18px] md:py-[26px] px-5 md:px-6 w-full">
+		<div className="rounded-xl bg-white shadow-custom flex flex-col py-[18px] md:py-[26px] px-5 md:px-6 w-full" data-cy={`todo-item-${index}`}>
 			<div className="inline-flex items-center justify-between">
 				<div className="inline-flex gap-4 items-center">
 					<input
@@ -38,8 +38,9 @@ export default function TodoCard({ id, priority, label, isActive, markAsDone, pa
 								className={`md:w-[9px] w-[5px] md:h-[9px] h-[5px] rounded-full ${generatePriority(
 									priority
 								)}`}
+								data-cy="todo-item-priority-indicator"
 							></span>
-							<p className="font-medium text-sm md:text-lg">{label}</p>
+							<p className="font-medium text-sm md:text-lg" data-cy="todo-item-title">{label}</p>
 						</span>
 					</label>
 					<button
@@ -48,6 +49,7 @@ export default function TodoCard({ id, priority, label, isActive, markAsDone, pa
 						data-te-toggle="modal"
 						data-te-target="#exampleModal"
 						onClick={() => passToModalEdit(id, label, priority)}
+						data-cy="todo-item-edit-button"
 					>
 						<img src="/svg/ic-pencil.svg" alt="" />
 					</button>

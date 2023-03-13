@@ -39,9 +39,9 @@ export default function ModalCreate({
 				data-te-modal-dialog-ref
 				className="pointer-events-none relative w-auto translate-y-[-50px] opacity-0 transition-all duration-300 ease-in-out min-[576px]:mx-auto mt-20 min-[576px]:max-w-[800px] px-5"
 			>
-				<div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none">
+				<div className="min-[576px]:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-md border-none bg-white bg-clip-padding text-current shadow-lg outline-none" data-cy="modal-add">
 					<div className="flex flex-shrink-0 items-center justify-between rounded-t-md border-b-2 border-neutral-100 border-opacity-100 p-4">
-						<h5 className="text-lg font-medium leading-normal text-neutral-800" id="exampleModalLabel">
+						<h5 className="text-lg font-medium leading-normal text-neutral-800" id="exampleModalLabel" data-cy="modal-add-title">
 							{method == "create" ? "Tambah List" : "Edit"} Item
 						</h5>
 						<button
@@ -49,6 +49,7 @@ export default function ModalCreate({
 							className="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
 							data-te-modal-dismiss
 							aria-label="Close"
+							data-cy="modal-add-close-button"
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -67,7 +68,7 @@ export default function ModalCreate({
 						data-te-modal-body-ref
 					>
 						<div className="flex flex-col gap-2">
-							<label htmlFor="" className="text-dark font-semibold text-xs">
+							<label htmlFor="" className="text-dark font-semibold text-xs" data-cy="modal-add-name-title">
 								Name List Item
 							</label>
 							<input
@@ -83,7 +84,7 @@ export default function ModalCreate({
 						</div>
 
 						<div className="flex flex-col gap-2">
-							<label htmlFor="" className="text-dark font-semibold text-xs">
+							<label htmlFor="" className="text-dark font-semibold text-xs" data-cy="modal-add-priority-title">
 								Name List Item
 							</label>
 							<PriorityOptions updateSelected={updateSelected} selectedPriority={priority} />

@@ -81,10 +81,12 @@ export default function Home() {
 							<h1 className="text-base md:text-4xl font-bold" data-cy="activity-title">
 								Activity
 							</h1>
-							<Button data-cy="activity-add-button" variant={"primary"} clickHandler={createActivity}>
-								<img src="/svg/ic-plus.svg" className="mr-[6px] w-3 md:w-6" alt="" />
-								Tambah
-							</Button>
+							<div data-cy="activity-add-button">
+								<Button variant={"primary"} clickHandler={createActivity}>
+									<img src="/svg/ic-plus.svg" className="mr-[6px] w-3 md:w-6" alt="" />
+									Tambah
+								</Button>
+							</div>
 						</div>
 
 						<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-[50px] gap-x-5 gap-y-6">
@@ -92,6 +94,7 @@ export default function Home() {
 								return (
 									<ActivityCard
 										key={index}
+										index={index}
 										id={activity.id}
 										title={activity.title}
 										date={activity.created_at}
