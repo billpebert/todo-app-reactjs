@@ -1,4 +1,5 @@
 import React from "react";
+import ExclamationTriangle from "../components/icon/ExclamationTriangle"
 
 export default function ModalDelete({ title, id, deleteHandler, closeModal }) {
 
@@ -19,7 +20,7 @@ export default function ModalDelete({ title, id, deleteHandler, closeModal }) {
 				<div className="sm:shadow-[0_0.5rem_1rem_rgba(#000, 0.15)] pointer-events-auto relative flex w-full flex-col rounded-xl border-none bg-white bg-clip-padding text-current shadow-lg outline-none">
 					<div className="relative flex-auto flex flex-col gap-[26px] p-5 md:p-10">
 						<div className="flex flex-col gap-2 items-center">
-							<img src="../svg/ic-exclamation-triangle.svg" alt="" data-cy="modal-delete-icon" />
+							<ExclamationTriangle/>
 							<p
 								className="text-center font-medium text-sm md:text-lg my-7 md:my-8"
 								data-cy="modal-delete-title"

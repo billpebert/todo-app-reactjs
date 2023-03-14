@@ -5,6 +5,7 @@ import AlertToast from "../components/AlertToast";
 import Button from "../components/Button";
 import ModalDelete from "../components/ModalDelete";
 import EmptyActivity from "../components/EmptyActivity";
+import Plus from "../components/icon/Plus";
 
 export default function Home() {
 	const [activityName, setActivityName] = useState("Default Name");
@@ -90,7 +91,7 @@ export default function Home() {
 								Activity
 							</h1>
 							<Button variant={"primary"} clickHandler={createActivity} dataCy="activity-add-button">
-								<img src="/svg/ic-plus.svg" className="mr-[6px] w-3 md:w-6" alt="" />
+								<Plus/>
 								Tambah
 							</Button>
 						</div>

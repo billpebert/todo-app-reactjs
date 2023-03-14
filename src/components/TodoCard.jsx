@@ -1,6 +1,17 @@
 import React from "react";
+import IconPencil from "../components/icon/IconPencil";
+import Trash from "../components/icon/Trash";
 
-export default function TodoCard({ id, priority, label, isActive, markAsDone, passToModalDelete, passToModalEdit, index }) {
+export default function TodoCard({
+	id,
+	priority,
+	label,
+	isActive,
+	markAsDone,
+	passToModalDelete,
+	passToModalEdit,
+	index,
+}) {
 	function generatePriority(valPriority) {
 		if (valPriority == "very-high") {
 			return "bg-danger";
@@ -16,7 +27,10 @@ export default function TodoCard({ id, priority, label, isActive, markAsDone, pa
 	}
 
 	return (
-		<div className="rounded-xl bg-white shadow-custom flex flex-col py-[18px] md:py-[26px] px-5 md:px-6 w-full" data-cy="todo-item">
+		<div
+			className="rounded-xl bg-white shadow-custom flex flex-col py-[18px] md:py-[26px] px-5 md:px-6 w-full"
+			data-cy="todo-item"
+		>
 			<div className="inline-flex items-center justify-between">
 				<div className="inline-flex gap-4 items-center">
 					<input
@@ -30,7 +44,11 @@ export default function TodoCard({ id, priority, label, isActive, markAsDone, pa
 						}}
 						onChange={(e) => {}}
 					/>
-					<label htmlFor={`${label}Checkbox`} className="check--label cursor-pointer" data-cy="todo-item-checkbox">
+					<label
+						htmlFor={`${label}Checkbox`}
+						className="check--label cursor-pointer"
+						data-cy="todo-item-checkbox"
+					>
 						<span className="check--label-box"></span>
 						<span className="check--label-text">
 							<span
@@ -39,7 +57,9 @@ export default function TodoCard({ id, priority, label, isActive, markAsDone, pa
 								)}`}
 								data-cy="todo-item-priority-indicator"
 							></span>
-							<p className="font-medium text-sm md:text-lg" data-cy="todo-item-title">{label}</p>
+							<p className="font-medium text-sm md:text-lg" data-cy="todo-item-title">
+								{label}
+							</p>
 						</span>
 					</label>
 					<button
@@ -50,7 +70,7 @@ export default function TodoCard({ id, priority, label, isActive, markAsDone, pa
 						onClick={() => passToModalEdit(id, label, priority)}
 						data-cy="todo-item-edit-button"
 					>
-						<img src="/svg/ic-pencil.svg" alt="" />
+						<IconPencil />
 					</button>
 				</div>
 				<button
@@ -61,7 +81,7 @@ export default function TodoCard({ id, priority, label, isActive, markAsDone, pa
 						passToModalDelete(id, label);
 					}}
 				>
-					<img src="/svg/ic-trash.svg" alt="" />
+					<Trash />
 				</button>
 			</div>
 		</div>

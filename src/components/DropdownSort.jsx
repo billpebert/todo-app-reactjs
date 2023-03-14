@@ -1,4 +1,10 @@
 import React, { useEffect } from "react";
+import Arrows from "./icon/Arrows";
+import SortLatest from "./icon/SortLatest";
+import SortOldest from "./icon/SortOldest";
+import SortAscending from "./icon/SortAscending";
+import SortDescending from "./icon/SortDescending";
+import SortOngoing from "./icon/SortOngoing";
 
 export default function DropdownSort({sortData}) {
 	const addCheckIcon = (el) => {
@@ -32,7 +38,7 @@ export default function DropdownSort({sortData}) {
 				data-te-dropdown-animation="off"
 				data-cy="todo-sort-button"
 			>
-				<img src="/svg/ic-arrows.svg" className="w-4 md:w-6" alt="" />
+				<Arrows/>
 			</button>
 			<ul
 				className="absolute z-[1000] float-left m-0 hidden min-w-[190px] md:min-w-[235px] max-w-max list-none overflow-hidden rounded-md border-none bg-white bg-clip-padding text-left text-base shadow-custom [&[data-te-dropdown-show]]:block divide-y divide-[#E5E5E5]"
@@ -51,7 +57,7 @@ export default function DropdownSort({sortData}) {
                         }}
 						data-cy="sort-selection"
 					>
-						<img src="/svg/ic-sort-newest.svg" alt="" />
+						<SortLatest/>
 						Terbaru
 					</a>
 				</li>
@@ -67,7 +73,7 @@ export default function DropdownSort({sortData}) {
                         }}
 						data-cy="sort-selection"
 					>
-						<img src="/svg/ic-sort-oldest.svg" alt="" />
+						<SortOldest/>
 						Terlama
 					</a>
 				</li>
@@ -83,7 +89,7 @@ export default function DropdownSort({sortData}) {
                         }}
 						data-cy="sort-selection"
 					>
-						<img src="/svg/ic-sort-asc.svg" alt="" />
+						<SortAscending/>
 						A-Z
 					</a>
 				</li>
@@ -99,7 +105,7 @@ export default function DropdownSort({sortData}) {
                             addCheckIcon(event)
                         }}
 					>
-						<img src="/svg/ic-sort-desc.svg" alt="" />
+						<SortDescending/>
 						Z-A
 					</a>
 				</li>
@@ -115,7 +121,7 @@ export default function DropdownSort({sortData}) {
                             addCheckIcon(event)
                         }}
 					>
-						<img src="/svg/ic-sort-arrow.svg" alt="" />
+						<SortOngoing/>
 						Belum Selesai
 					</a>
 				</li>

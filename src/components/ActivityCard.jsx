@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Trash from "../components/icon/Trash";
 
-export default function ActivityCard({ id, title, date, clickHandler, index }) {
+export default function ActivityCard({ id, title, date, clickHandler }) {
 	function formattedDate(date) {
 		// console.log(clickHandler(title, id))
 		let d = new Date(date);
@@ -29,7 +30,7 @@ export default function ActivityCard({ id, title, date, clickHandler, index }) {
 					data-cy="activity-item-delete-button"
 					onClick={() => clickHandler(id, title)}
 				>
-					<img src="/svg/ic-trash.svg" className="w-3 md:w-6" alt="" />
+					<Trash className="w-4 h-4 md:h-6 md:w-6"/>
 				</button>
 			</div>
 		</div>

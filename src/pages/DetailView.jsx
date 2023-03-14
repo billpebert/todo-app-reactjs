@@ -8,6 +8,9 @@ import AlertToast from "../components/AlertToast";
 import DropdownSort from "../components/DropdownSort";
 import Button from "../components/Button";
 import EmptyTodo from "../components/EmptyTodo";
+import ButtonBack from "../components/ButtonBack";
+import IconPencil from "../components/icon/IconPencil";
+import Plus from "../components/icon/Plus";
 
 export default function DetailView() {
 	const { id } = useParams();
@@ -45,7 +48,7 @@ export default function DetailView() {
 			})
 			.catch((error) => {
 				console.log(error);
-			})
+			});
 	}
 
 	function updateActivityTitle() {
@@ -224,26 +227,23 @@ export default function DetailView() {
 				<>
 					<div className="container" data-cy="activity-list-item">
 						{/* Header */}
-						<div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+						<div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
 							<div className="inline-flex items-center gap-5 justify-between md:justify-start w-max">
 								{/* <!-- Back Button --> */}
-								<Link to="/">
-									<button
-										type="button"
-										className="hidden md:block w-5 md:w-6"
-										data-cy="todo-back-button"
-									>
-										<img src="/svg/ic-chevron-left.svg" alt="" />
-									</button>
+								<Link to="/" className="hidden md:block">
+									<ButtonBack />
 								</Link>
-								<h1
-									className={`text-base md:text-4xl font-bold ${showTitleForm ? "hidden" : ""}`}
-									id="activityH1"
-									data-cy="todo-title"
-									onClick={toggleEditActName}
-								>
-									{activity.title}
-								</h1>
+
+								{!showTitleForm && (
+									<h1
+										className="text-base md:text-4xl font-bold"
+										id="activityH1"
+										data-cy="todo-title"
+										onClick={toggleEditActName}
+									>
+										{activity.title}
+									</h1>
+								)}
 
 								{showTitleForm && (
 									<input
@@ -264,7 +264,7 @@ export default function DetailView() {
 									onClick={toggleEditActName}
 									data-cy="todo-title-edit-button"
 								>
-									<img src="/svg/ic-pencil.svg" alt="" />
+									<IconPencil />
 								</button>
 							</div>
 							<div className="inline-flex items-center gap-5 self-end">
@@ -278,7 +278,7 @@ export default function DetailView() {
 										clickHandler={() => modalCreateData()}
 										dataCy="todo-add-button"
 									>
-										<img src="/svg/ic-plus.svg" className="mr-[6px] w-3 md:w-6" alt="" />
+										<Plus />
 										Tambah
 									</Button>
 								</div>
