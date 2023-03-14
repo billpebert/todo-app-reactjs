@@ -206,7 +206,7 @@ export default function DetailView() {
 		} else if (type == "ongoing") {
 			setTodos((oldValue) =>
 				[...oldValue].sort(function (a, b) {
-					return a.is_active - b.is_active;
+					return b.is_active - a.is_active;
 				})
 			);
 		}
