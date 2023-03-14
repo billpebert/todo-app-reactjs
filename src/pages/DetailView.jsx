@@ -22,7 +22,7 @@ export default function DetailView() {
 	const [showTitleForm, setShowTitleForm] = useState(false);
 	const [activityName, setActivityName] = useState("Default Name");
 	const [activityId, setActivityId] = useState(0);
-	const [isUpdate, setIsUpdate] = useState(false)
+	const [isUpdate, setIsUpdate] = useState(false);
 	const [showModalDelete, setShowModalDelete] = useState(false);
 
 	// Pass to edit modal
@@ -31,7 +31,7 @@ export default function DetailView() {
 	const [todoEditPriority, setTodoEditPriority] = useState("Pilih priority");
 
 	function getActivity() {
-		setIsLoading(true);
+		// setIsLoading(true);
 		axios
 			.get(`${api}/activity-groups/${id}`)
 			.then((response) => {
@@ -39,17 +39,13 @@ export default function DetailView() {
 				setActivityTitle(response.data.title);
 				setActivityGroup(response.data.id);
 				setTodos(response.data.todo_items);
-				// console.log(todos);
+				if (localStorage.getItem("sortBy")) {
+					sortData(localStorage.getItem("sortBy"));
+				}
 			})
 			.catch((error) => {
 				console.log(error);
 			})
-			.finally(() => {
-				// if (localStorage.getItem("sortBy")) {
-				//     sortData(localStorage.getItem("sortBy"));
-				// }
-				setIsLoading(false);
-			});
 	}
 
 	function updateActivityTitle() {
@@ -81,7 +77,7 @@ export default function DetailView() {
 				priority: priority,
 			})
 			.then((response) => {
-				setIsUpdate(false)
+				setIsUpdate(false);
 				getActivity();
 				// console.log(response);
 			})
@@ -146,66 +142,74 @@ export default function DetailView() {
 
 	// Make sure that the modal form is cleared
 	const modalCreateData = () => {
-		setIsUpdate(false)
+		setIsUpdate(false);
 		setTodoEditId(0);
 		setTodoEditTitle("");
 		setTodoEditPriority("Pilih priority");
-	}
+	};
 
 	// Pass existing todo data to modal
 	const modalEditData = (id, title, priority) => {
-		setIsUpdate(true)
+		setIsUpdate(true);
 		setTodoEditId(id);
 		setTodoEditTitle(title);
 		setTodoEditPriority(priority);
 	};
 
 	const closeModal = () => {
-		setShowModalDelete((state) => !state)
-	} 
+		setShowModalDelete((state) => !state);
+	};
 
 	// Pass data to modal delete
 	function passToModalDelete(id, name) {
-		setShowModalDelete((state) => !state)
+		setShowModalDelete((state) => !state);
 		return setActivityName(name), setActivityId(id);
 	}
 
 	function sortData(type) {
-		if (localStorage.getItem("sortBy")) localStorage.setItem("sortBy", type);
+		localStorage.setItem("sortBy", type);
 
-		const todoItems = [...todos];
 		if (type == "asc") {
-			todoItems.sort(function (a, b) {
-				// changing the case (to upper or lower) ensures a case insensitive sort.
-				let textA = a.title.toUpperCase();
-				let textB = b.title.toUpperCase();
-				return textA < textB ? -1 : textA > textB ? 1 : 0;
-			});
+			setTodos((oldValue) =>
+				[...oldValue].sort(function (a, b) {
+					// changing the case (to upper or lower) ensures a case insensitive sort.
+					let textA = a.title.toUpperCase();
+					let textB = b.title.toUpperCase();
+					return textA < textB ? -1 : textA > textB ? 1 : 0;
+				})
+			);
 		} else if (type == "desc") {
-			todoItems.sort(function (a, b) {
-				// changing the case (to upper or lower) ensures a case insensitive sort.
-				let textA = a.title.toUpperCase();
-				let textB = b.title.toUpperCase();
-				return textA > textB ? -1 : textA < textB ? 1 : 0;
-			});
+			setTodos((oldValue) =>
+				[...oldValue].sort(function (a, b) {
+					// changing the case (to upper or lower) ensures a case insensitive sort.
+					let textA = a.title.toUpperCase();
+					let textB = b.title.toUpperCase();
+					return textA > textB ? -1 : textA < textB ? 1 : 0;
+				})
+			);
 		} else if (type == "newest") {
-			todoItems.sort(function (a, b) {
-				let idA = new Date(a.id);
-				let idB = new Date(b.id);
-				return idB - idA;
-			});
+			setTodos((oldValue) =>
+				[...oldValue].sort(function (a, b) {
+					let idA = new Date(a.id);
+					let idB = new Date(b.id);
+					return idB - idA;
+				})
+			);
 		} else if (type == "oldest") {
-			todoItems.sort(function (a, b) {
-				let idA = new Date(a.id);
-				let idB = new Date(b.id);
-				return idA - idB;
-			});
+			setTodos((oldValue) =>
+				[...oldValue].sort(function (a, b) {
+					let idA = new Date(a.id);
+					let idB = new Date(b.id);
+					return idA - idB;
+				})
+			);
 		} else if (type == "ongoing") {
-			todoItems.sort(function (a, b) {
-				return a.is_active - b.is_active;
-			});
+			setTodos((oldValue) =>
+				[...oldValue].sort(function (a, b) {
+					return a.is_active - b.is_active;
+				})
+			);
 		}
-		setTodos(todoItems);
 	}
 
 	useEffect(() => {
@@ -224,7 +228,11 @@ export default function DetailView() {
 							<div className="inline-flex items-center gap-5 justify-between md:justify-start w-max">
 								{/* <!-- Back Button --> */}
 								<Link to="/">
-									<button type="button" className="hidden md:block w-5 md:w-6" data-cy="todo-back-button">
+									<button
+										type="button"
+										className="hidden md:block w-5 md:w-6"
+										data-cy="todo-back-button"
+									>
 										<img src="/svg/ic-chevron-left.svg" alt="" />
 									</button>
 								</Link>
@@ -250,7 +258,12 @@ export default function DetailView() {
 										onKeyDown={(e) => (e.key == "Enter" ? updateActivityTitle() : false)}
 									/>
 								)}
-								<button type="button" className="w-5 md:w-6" onClick={toggleEditActName} data-cy="todo-title-edit-button">
+								<button
+									type="button"
+									className="w-5 md:w-6"
+									onClick={toggleEditActName}
+									data-cy="todo-title-edit-button"
+								>
 									<img src="/svg/ic-pencil.svg" alt="" />
 								</button>
 							</div>
@@ -260,7 +273,11 @@ export default function DetailView() {
 
 								{/* Button Tambah */}
 								<div data-te-toggle="modal" data-te-target="#exampleModal">
-									<Button variant="primary" clickHandler={() => modalCreateData()} dataCy="todo-add-button">
+									<Button
+										variant="primary"
+										clickHandler={() => modalCreateData()}
+										dataCy="todo-add-button"
+									>
 										<img src="/svg/ic-plus.svg" className="mr-[6px] w-3 md:w-6" alt="" />
 										Tambah
 									</Button>
@@ -287,7 +304,11 @@ export default function DetailView() {
 
 						{!todos.length && <EmptyTodo />}
 					</div>
+
+					{/* Alert */}
 					{showToast && <AlertToast message={message} />}
+
+					{/* Modal Create & Update */}
 					<ModalCreate
 						method={isUpdate ? "edit" : "create"}
 						submitHandler={isUpdate ? updateItem : createItem}
@@ -295,11 +316,16 @@ export default function DetailView() {
 						defTitle={todoEditTitle}
 						defPriority={todoEditPriority}
 					/>
-					{
-						showModalDelete && (
-							<ModalDelete title={activityName} id={activityId} deleteHandler={deleteActivity} closeModal={closeModal} />
-						)
-					}
+
+					{/* Modal delete */}
+					{showModalDelete && (
+						<ModalDelete
+							title={activityName}
+							id={activityId}
+							deleteHandler={deleteActivity}
+							closeModal={closeModal}
+						/>
+					)}
 				</>
 			)}
 		</>
