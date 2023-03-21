@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import TodoCard from "../components/TodoCard";
@@ -11,17 +11,16 @@ import EmptyTodo from "../components/EmptyTodo";
 import ButtonBack from "../components/ButtonBack";
 import IconPencil from "../components/icon/IconPencil";
 import Plus from "../components/icon/Plus";
+import { init_state, todoReducer } from "../reducer/todoReducer";
 
 export default function DetailView() {
 	const { id } = useParams();
 	const api = "https://todo.api.devcode.gethired.id";
+
+	const [state, dispatch] = useReducer(todoReducer, init_state);
 	const [isLoading, setIsLoading] = useState(false);
 	const [showToast, setShowToast] = useState(false);
 	const [message, setMessage] = useState("");
-	const [activity, setActivity] = useState([]);
-	const [todos, setTodos] = useState([]);
-	const [activityTitle, setActivityTitle] = useState();
-	const [activityGroup, setActivityGroup] = useState();
 	const [showTitleForm, setShowTitleForm] = useState(false);
 	const [activityName, setActivityName] = useState("Default Name");
 	const [activityId, setActivityId] = useState(0);
@@ -38,24 +37,33 @@ export default function DetailView() {
 		axios
 			.get(`${api}/activity-groups/${id}`)
 			.then((response) => {
-				setActivity(response.data);
-				setActivityTitle(response.data.title);
-				setActivityGroup(response.data.id);
-				setTodos(response.data.todo_items);
-				if (localStorage.getItem("sortBy")) {
-					sortData(localStorage.getItem("sortBy"));
-				}
+				// setTodos
+				dispatch({ 
+					type: "fetchActivity",
+					payload: {
+						activity: response.data, 
+						activityTitle: response.data.title, 
+						activityId: response.data.id,
+						todos: response.data.todo_items
+					} 
+			});
 			})
 			.catch((error) => {
 				console.log(error);
+			})
+			.finally(() => {
+				if (localStorage.getItem("sortBy")) {
+					sortData(localStorage.getItem("sortBy"));
+				}
 			});
 	}
+	// console.log(state);
 
 	function updateActivityTitle() {
-		if (activity.title != activityTitle) {
+		if (state.activity.title != state.activityTitle) {
 			axios
 				.patch(`${api}/activity-groups/${id}`, {
-					title: activityTitle,
+					title: state.activityTitle,
 				})
 				.then((response) => {
 					getActivity();
@@ -76,7 +84,7 @@ export default function DetailView() {
 		axios
 			.post(`${api}/todo-items`, {
 				title: title,
-				activity_group_id: activityGroup,
+				activity_group_id: state.activityId,
 				priority: priority,
 			})
 			.then((response) => {
@@ -95,7 +103,7 @@ export default function DetailView() {
 			.patch(`${api}/todo-items/${id}`, {
 				id: id,
 				title: title,
-				activity_group_id: activityGroup,
+				activity_group_id: state.activityId,
 				priority: priority,
 			})
 			.catch((error) => {
@@ -171,48 +179,7 @@ export default function DetailView() {
 
 	function sortData(type) {
 		localStorage.setItem("sortBy", type);
-
-		if (type == "asc") {
-			setTodos((oldValue) =>
-				[...oldValue].sort(function (a, b) {
-					// changing the case (to upper or lower) ensures a case insensitive sort.
-					let textA = a.title.toUpperCase();
-					let textB = b.title.toUpperCase();
-					return textA < textB ? -1 : textA > textB ? 1 : 0;
-				})
-			);
-		} else if (type == "desc") {
-			setTodos((oldValue) =>
-				[...oldValue].sort(function (a, b) {
-					// changing the case (to upper or lower) ensures a case insensitive sort.
-					let textA = a.title.toUpperCase();
-					let textB = b.title.toUpperCase();
-					return textA > textB ? -1 : textA < textB ? 1 : 0;
-				})
-			);
-		} else if (type == "newest") {
-			setTodos((oldValue) =>
-				[...oldValue].sort(function (a, b) {
-					let idA = new Date(a.id);
-					let idB = new Date(b.id);
-					return idB - idA;
-				})
-			);
-		} else if (type == "oldest") {
-			setTodos((oldValue) =>
-				[...oldValue].sort(function (a, b) {
-					let idA = new Date(a.id);
-					let idB = new Date(b.id);
-					return idA - idB;
-				})
-			);
-		} else if (type == "ongoing") {
-			setTodos((oldValue) =>
-				[...oldValue].sort(function (a, b) {
-					return b.is_active - a.is_active;
-				})
-			);
-		}
+		dispatch({type: type});
 	}
 
 	useEffect(() => {
@@ -241,7 +208,7 @@ export default function DetailView() {
 										data-cy="todo-title"
 										onClick={toggleEditActName}
 									>
-										{activity.title}
+										{state.activity.title}
 									</h1>
 								)}
 
@@ -249,11 +216,11 @@ export default function DetailView() {
 									<input
 										type="text"
 										className="text-base md:text-4xl font-bold border-b border-b-[#D8D8D8] py-3 read-only:border-none outline-none w-max flex-shrink"
-										placeholder={activity.title}
-										name="activity_name"
+										placeholder={state.activity.title}
+										name="activityTitle"
 										id="activityName"
-										value={activityTitle}
-										onChange={(e) => setActivityTitle(e.target.value)}
+										value={state.activityTitle}
+										onChange={(e) => dispatch({type:'changeActivityTitle', payload: {name: e.target.name, value: e.target.value}})}
 										onBlur={() => updateActivityTitle()}
 										onKeyDown={(e) => (e.key == "Enter" ? updateActivityTitle() : false)}
 									/>
@@ -285,7 +252,7 @@ export default function DetailView() {
 							</div>
 						</div>
 						<div className="flex flex-col mt-7 md:mt-[50px] gap-y-[10px]">
-							{todos.map((todo, key) => {
+							{state.todos?.map((todo, key) => {
 								return (
 									<TodoCard
 										key={key}
@@ -302,7 +269,7 @@ export default function DetailView() {
 							})}
 						</div>
 
-						{!todos.length && <EmptyTodo />}
+						{!state.todos?.length && <EmptyTodo />}
 					</div>
 
 					{/* Alert */}
