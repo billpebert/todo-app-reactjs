@@ -12,6 +12,7 @@ import ButtonBack from "../components/ButtonBack";
 import IconPencil from "../components/icon/IconPencil";
 import Plus from "../components/icon/Plus";
 import { init_state, todoReducer } from "../reducer/todoReducer";
+import useModal from "../app/useModal";
 
 export default function DetailView() {
 	const { id } = useParams();
@@ -25,7 +26,7 @@ export default function DetailView() {
 	const [activityName, setActivityName] = useState("Default Name");
 	const [activityId, setActivityId] = useState(0);
 	const [isUpdate, setIsUpdate] = useState(false);
-	const [showModalDelete, setShowModalDelete] = useState(false);
+	const [isShowing, toggleModal] = useModal()
 
 	// Pass to edit modal
 	const [todoEditId, setTodoEditId] = useState(0);
@@ -167,13 +168,9 @@ export default function DetailView() {
 		setTodoEditPriority(priority);
 	};
 
-	const closeModal = () => {
-		setShowModalDelete((state) => !state);
-	};
-
 	// Pass data to modal delete
 	function passToModalDelete(id, name) {
-		setShowModalDelete((state) => !state);
+		toggleModal()
 		return setActivityName(name), setActivityId(id);
 	}
 
@@ -285,12 +282,12 @@ export default function DetailView() {
 					/>
 
 					{/* Modal delete */}
-					{showModalDelete && (
+					{isShowing && (
 						<ModalDelete
 							title={activityName}
 							id={activityId}
 							deleteHandler={deleteActivity}
-							closeModal={closeModal}
+							closeModal={toggleModal}
 						/>
 					)}
 				</>

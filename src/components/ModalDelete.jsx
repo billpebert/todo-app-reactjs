@@ -1,9 +1,9 @@
-import React from "react";
+import ReactDOM from 'react-dom';
 import ExclamationTriangle from "../components/icon/ExclamationTriangle"
 
 export default function ModalDelete({ title, id, deleteHandler, closeModal }) {
 
-	return (
+	return ReactDOM.createPortal(
 		<>
 			{/* Backdrop */}
 			<div
@@ -52,5 +52,7 @@ export default function ModalDelete({ title, id, deleteHandler, closeModal }) {
 				</div>
 			</div>
 		</>
+
+		, document.body
 	);
 }

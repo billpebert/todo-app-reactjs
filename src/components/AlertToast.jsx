@@ -1,8 +1,8 @@
-import React from "react";
+import ReactDOM from "react-dom";
 
 export default function AlertToast({ message }) {
 
-	return (
+	return ReactDOM.createPortal (
 		<div
 			className="fixed top-8 right-4 md:top-5 md:right-5 opacity-100 transition-opacity"
 			data-cy="modal-information"
@@ -56,5 +56,6 @@ export default function AlertToast({ message }) {
 				</div>
 			</div>
 		</div>
+		, document.body
 	);
 }
