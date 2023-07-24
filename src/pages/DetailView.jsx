@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
+import { useGetActivityQuery, useUpdateActivityNameMutation } from "../slice/ActivitySlice";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import TodoCard from "../components/TodoCard";
@@ -16,14 +17,16 @@ import useModal from "../app/useModal";
 
 export default function DetailView() {
 	const { id } = useParams();
+	const { data: activityData, isLoading: queryLoading } = useGetActivityQuery(id)
+	const [updateActivityTitle, {isLoading: loadingActivity}] = useUpdateActivityNameMutation()
 	const api = "https://todo.api.devcode.gethired.id";
 
 	const [state, dispatch] = useReducer(todoReducer, init_state);
-	const [isLoading, setIsLoading] = useState(false);
+	// const [isLoading, setIsLoading] = useState(false);
 	const [showToast, setShowToast] = useState(false);
 	const [message, setMessage] = useState("");
 	const [showTitleForm, setShowTitleForm] = useState(false);
-	const [activityName, setActivityName] = useState("Default Name");
+	const [activityName, setActivityName] = useState(activityData?.title);
 	const [activityId, setActivityId] = useState(0);
 	const [isUpdate, setIsUpdate] = useState(false);
 	const [isShowing, toggleModal] = useModal()
@@ -33,51 +36,12 @@ export default function DetailView() {
 	const [todoEditTitle, setTodoEditTitle] = useState("");
 	const [todoEditPriority, setTodoEditPriority] = useState("Pilih priority");
 
-	function getActivity() {
-		// setIsLoading(true);
-		axios
-			.get(`${api}/activity-groups/${id}`)
-			.then((response) => {
-				// setTodos
-				dispatch({ 
-					type: "fetchActivity",
-					payload: {
-						activity: response.data, 
-						activityTitle: response.data.title, 
-						activityId: response.data.id,
-						todos: response.data.todo_items
-					} 
-			});
-			})
-			.catch((error) => {
-				console.log(error);
-			})
-			.finally(() => {
-				if (localStorage.getItem("sortBy")) {
-					sortData(localStorage.getItem("sortBy"));
-				}
-			});
-	}
-	// console.log(state);
-
-	function updateActivityTitle() {
-		if (state.activity.title != state.activityTitle) {
-			axios
-				.patch(`${api}/activity-groups/${id}`, {
-					title: state.activityTitle,
-				})
-				.then((response) => {
-					getActivity();
-				})
-				.catch((error) => {
-					console.log(error);
-				})
-				.finally(() => {
-					toggleEditActName();
-				});
-		} else {
-			console.log("Nothing to update");
-			toggleEditActName();
+	const onUpdateActivityName = async (e) => {
+		try {
+			await updateActivityTitle({ id: activityData.id, title: activityName}).unwrap()
+			toggleEditActName()
+		} catch (error) {
+			console.error(error)
 		}
 	}
 
@@ -90,7 +54,7 @@ export default function DetailView() {
 			})
 			.then((response) => {
 				setIsUpdate(false);
-				getActivity();
+				// getActivity();
 				// console.log(response);
 			})
 			.catch((error) => {
@@ -111,7 +75,7 @@ export default function DetailView() {
 				console.error(error);
 			})
 			.finally(() => {
-				getActivity();
+				// getActivity();
 			});
 	}
 
@@ -119,7 +83,7 @@ export default function DetailView() {
 		axios
 			.delete(`${api}/todo-items/${id}`)
 			.then(() => {
-				getActivity();
+				// getActivity();
 				setMessage("List berhasil dihapus");
 				setShowToast(true);
 			})
@@ -134,7 +98,7 @@ export default function DetailView() {
 				is_active: value,
 			})
 			.then(() => {
-				getActivity();
+				// getActivity();
 			})
 			.catch((error) => {
 				console.log(error);
@@ -180,12 +144,12 @@ export default function DetailView() {
 	}
 
 	useEffect(() => {
-		getActivity();
-	}, []);
+		if(!queryLoading) setActivityName(activityData?.title)
+	}, [queryLoading])
 
 	return (
 		<>
-			{isLoading ? (
+			{queryLoading ? (
 				<img src="/svg/loader.svg" className="mx-auto" alt="" />
 			) : (
 				<>
@@ -205,7 +169,7 @@ export default function DetailView() {
 										data-cy="todo-title"
 										onClick={toggleEditActName}
 									>
-										{state.activity.title}
+										{activityName}
 									</h1>
 								)}
 
@@ -213,13 +177,13 @@ export default function DetailView() {
 									<input
 										type="text"
 										className="text-base md:text-4xl font-bold border-b border-b-[#D8D8D8] py-3 read-only:border-none outline-none w-max flex-shrink"
-										placeholder={state.activity.title}
+										placeholder={activityData.title}
 										name="activityTitle"
 										id="activityName"
-										value={state.activityTitle}
-										onChange={(e) => dispatch({type:'changeActivityTitle', payload: {name: e.target.name, value: e.target.value}})}
-										onBlur={() => updateActivityTitle()}
-										onKeyDown={(e) => (e.key == "Enter" ? updateActivityTitle() : false)}
+										value={activityName}
+										onChange={(e) => setActivityName(e.target.value)}
+										onBlur={() => onUpdateActivityName()}
+										onKeyDown={(e) => (e.key == "Enter" ? onUpdateActivityName() : false)}
 									/>
 								)}
 								<button
@@ -249,7 +213,7 @@ export default function DetailView() {
 							</div>
 						</div>
 						<div className="flex flex-col mt-7 md:mt-[50px] gap-y-[10px]">
-							{state.todos?.map((todo, key) => {
+							{activityData.todo_items?.map((todo, key) => {
 								return (
 									<TodoCard
 										key={key}
@@ -266,7 +230,7 @@ export default function DetailView() {
 							})}
 						</div>
 
-						{!state.todos?.length && <EmptyTodo />}
+						{!activityData.todo_items?.length && <EmptyTodo />}
 					</div>
 
 					{/* Alert */}

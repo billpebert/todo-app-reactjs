@@ -14,6 +14,20 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         // ...result.ids.map(id => ({ type: 'Activity', id }))
       ]
     }),
+    getActivity: builder.query({
+      query: id => `/${id}`,
+      providesTags: ['Activity']
+    }),
+    updateActivityName: builder.mutation({
+      query: initialActivity => ({
+        url: `/${initialActivity.id}`,
+        method: 'PATCH',
+        body: {
+          title: initialActivity.title
+        }
+      }),
+      invalidatesTags: ['Activity']
+    }),
     createActivity: builder.mutation({
       query: initialActivity => ({
         url: '/',
@@ -31,7 +45,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
       query: ({ id }) => ({
         url: `/${id}`,
         method: 'DELETE',
-        body: {id}
+        body: { id }
       }),
       invalidatesTags: [
         { type: 'Activity', id: "LIST" }
@@ -40,7 +54,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
   })
 })
 
-export const { useGetActivitiesQuery, useCreateActivityMutation, useDeleteActivityMutation } = extendedApiSlice
+export const { useGetActivitiesQuery, useGetActivityQuery, useCreateActivityMutation, useDeleteActivityMutation, useUpdateActivityNameMutation } = extendedApiSlice
 
 export const selectActivityResult = extendedApiSlice.endpoints.getActivities.select()
 
