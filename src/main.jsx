@@ -7,16 +7,17 @@ import "tw-elements"
 
 import { store } from "./app/store";
 import { Provider } from "react-redux";
-import { extendedApiSlice } from "./slice/ActivitySlice";
+import { extendedApiSliceActivity } from "./slice/ActivitySlice";
 
-store.dispatch(extendedApiSlice.endpoints.getActivities.initiate())
+store.dispatch(extendedApiSliceActivity.endpoints.getActivities.initiate())
+// store.dispatch(extendedApiSliceActivity.endpoints.getActivity.initiate())
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-	<React.StrictMode>
+	// <React.StrictMode>
 		<Provider store={store}>
 		<BrowserRouter>
 			<App />
 		</BrowserRouter>
 		</Provider>
-	</React.StrictMode>
+	// </React.StrictMode>
 );

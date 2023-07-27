@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { useGetActivityQuery, useUpdateActivityNameMutation } from "../slice/ActivitySlice";
+import { useCreateTodoMutation, useDeleteTodoMutation, useMarkAsDoneMutation, useUpdateTodoMutation } from "../slice/TodoSlice";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import TodoCard from "../components/TodoCard";
@@ -19,6 +20,11 @@ export default function DetailView() {
 	const { id } = useParams();
 	const { data: activityData, isLoading: queryLoading } = useGetActivityQuery(id)
 	const [updateActivityTitle, {isLoading: loadingActivity}] = useUpdateActivityNameMutation()
+	const [createTodo] = useCreateTodoMutation()
+	const [ updateTodo ] = useUpdateTodoMutation()
+	const [ deleteTodo, {isSuccess: isDeleted } ] = useDeleteTodoMutation()
+	const [ markAsDone ] = useMarkAsDoneMutation()
+
 	const api = "https://todo.api.devcode.gethired.id";
 
 	const [state, dispatch] = useReducer(todoReducer, init_state);
@@ -45,64 +51,41 @@ export default function DetailView() {
 		}
 	}
 
-	function createItem(title, priority) {
-		axios
-			.post(`${api}/todo-items`, {
-				title: title,
-				activity_group_id: state.activityId,
-				priority: priority,
-			})
-			.then((response) => {
-				setIsUpdate(false);
-				// getActivity();
-				// console.log(response);
-			})
-			.catch((error) => {
-				console.error(error);
-			});
+	const onCreateTodo = async (todoTitle, selectedPriority) => {
+		try {
+			setIsUpdate(false);
+			await createTodo({ title: todoTitle, activity_group_id: activityData.id, priority: selectedPriority}).unwrap()
+		} catch (err) {
+			console.log(err)
+		}
 	}
 
-	function updateItem(id, title, priority) {
-		// console.log(id, title, priority)
-		axios
-			.patch(`${api}/todo-items/${id}`, {
-				id: id,
-				title: title,
-				activity_group_id: state.activityId,
-				priority: priority,
-			})
-			.catch((error) => {
-				console.error(error);
-			})
-			.finally(() => {
-				// getActivity();
-			});
+	const onUpdateTodo = async (id, title, priority) => {
+		try {
+			await updateTodo({ id: id, title: title, priority: priority}).unwrap()
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
-	function deleteActivity(id) {
-		axios
-			.delete(`${api}/todo-items/${id}`)
-			.then(() => {
-				// getActivity();
+	const onMarkAsDone = async (id, status) => {
+		try {
+			await markAsDone({ id: id, status: status}).unwrap()
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	const onDeleteTodo = async (id) => {
+		try {
+			await deleteTodo({ id: id}).unwrap()
+			if (isDeleted) {
 				setMessage("List berhasil dihapus");
 				setShowToast(true);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}
-
-	function markAsDone(id, value) {
-		axios
-			.patch(`${api}/todo-items/${id}`, {
-				is_active: value,
-			})
-			.then(() => {
-				// getActivity();
-			})
-			.catch((error) => {
-				console.log(error);
-			});
+			}
+		} catch (error) {
+			console.log(error)
+		}
 	}
 
 	// Switch #activityH1 with input
@@ -222,7 +205,7 @@ export default function DetailView() {
 										priority={todo.priority}
 										id={todo.id}
 										isActive={todo.is_active}
-										markAsDone={markAsDone}
+										markAsDone={onMarkAsDone}
 										passToModalDelete={passToModalDelete}
 										passToModalEdit={modalEditData}
 									/>
@@ -239,7 +222,7 @@ export default function DetailView() {
 					{/* Modal Create & Update */}
 					<ModalCreate
 						method={isUpdate ? "edit" : "create"}
-						submitHandler={isUpdate ? updateItem : createItem}
+						submitHandler={isUpdate ? onUpdateTodo : onCreateTodo}
 						defId={todoEditId}
 						defTitle={todoEditTitle}
 						defPriority={todoEditPriority}
@@ -250,7 +233,7 @@ export default function DetailView() {
 						<ModalDelete
 							title={activityName}
 							id={activityId}
-							deleteHandler={deleteActivity}
+							deleteHandler={onDeleteTodo}
 							closeModal={toggleModal}
 						/>
 					)}

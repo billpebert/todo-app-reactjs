@@ -5,32 +5,45 @@ const activityAdapter = createEntityAdapter({})
 const initialState = activityAdapter.getInitialState()
 const email = 'bilpo@mail.com'
 
-export const extendedApiSlice = apiSlice.injectEndpoints({
+export const extendedApiSliceActivity = apiSlice.injectEndpoints({
   endpoints: builder => ({
     getActivities: builder.query({
-      query: () => `?email=${email}`,
+      query: () => `/activity-groups?email=${email}`,
       providesTags: (result, error, arg) => [
+        // console.log(result),
+        // console.log(result.data.map(({ id }) => id)),
         { type: 'Activity', id: "LIST" },
-        // ...result.ids.map(id => ({ type: 'Activity', id }))
+        // 'Activity',
+        ...result.data.map(({ id }) => ({ type: 'Activity', id })),
+        // ...result.ids.map(id => ({ type: 'Activity', id })),
       ]
     }),
     getActivity: builder.query({
-      query: id => `/${id}`,
-      providesTags: ['Activity']
+      query: id => `/activity-groups/${id}`,
+      providesTags: (result, error, arg) => [
+        // console.log(arg),
+        { type: 'Activity', id: arg },
+        { type: 'Todo', id: arg },
+        ...result.todo_items.map(({ id }) => ({ type: 'Todo', id }))
+      ]
     }),
     updateActivityName: builder.mutation({
       query: initialActivity => ({
-        url: `/${initialActivity.id}`,
+        url: `/activity-groups/${initialActivity.id}`,
         method: 'PATCH',
         body: {
           title: initialActivity.title
         }
       }),
-      invalidatesTags: ['Activity']
+      // invalidatesTags: ['Activity']
+      invalidatesTags: (result, error, arg) => [
+        // console.log(arg),
+        { type: 'Activity', id: arg.id }
+      ]
     }),
     createActivity: builder.mutation({
       query: initialActivity => ({
-        url: '/',
+        url: '/activity-groups',
         method: 'POST',
         body: {
           title: 'New Acitvity',
@@ -43,7 +56,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
     }),
     deleteActivity: builder.mutation({
       query: ({ id }) => ({
-        url: `/${id}`,
+        url: `/activity-groups/${id}`,
         method: 'DELETE',
         body: { id }
       }),
@@ -54,9 +67,9 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
   })
 })
 
-export const { useGetActivitiesQuery, useGetActivityQuery, useCreateActivityMutation, useDeleteActivityMutation, useUpdateActivityNameMutation } = extendedApiSlice
+export const { useGetActivitiesQuery, useGetActivityQuery, useCreateActivityMutation, useDeleteActivityMutation, useUpdateActivityNameMutation } = extendedApiSliceActivity
 
-export const selectActivityResult = extendedApiSlice.endpoints.getActivities.select()
+export const selectActivityResult = extendedApiSliceActivity.endpoints.getActivities.select()
 
 // memoized selector
 const selectActivitiesData = createSelector(

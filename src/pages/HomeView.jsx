@@ -1,12 +1,14 @@
+import { useSelector } from "react-redux"
 import ActivityCard from "../components/ActivityCard"
 import Button from "../components/Button"
 import EmptyActivity from "../components/EmptyActivity"
 import Plus from "../components/icon/Plus"
-import { useGetActivitiesQuery, useCreateActivityMutation } from "../slice/ActivitySlice"
+import { useGetActivitiesQuery, useCreateActivityMutation, selectIds } from "../slice/ActivitySlice"
 
 export default function Home() {
-	const { data: activities, isLoading } = useGetActivitiesQuery()
+	const { data: activities, isLoading, isSuccess } = useGetActivitiesQuery()
 	const [createActivity] = useCreateActivityMutation()
+	const dataList = useSelector(selectIds)
 
 	const onClickCreateActivity = async () => {
 		try {
@@ -32,6 +34,10 @@ export default function Home() {
 		</div>
 	)
 
+	if(isSuccess) {
+		console.log(dataList)
+	}
+
 	if (isLoading) {
 		return <img src="/svg/loader.svg" className="mx-auto" alt="" />
 	}
@@ -51,7 +57,7 @@ export default function Home() {
 
 				{activitiesContent}
 			</div>
-
+			
 			{!activities.data.length && <EmptyActivity />}
 		</>
 	)
